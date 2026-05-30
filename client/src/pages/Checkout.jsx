@@ -255,7 +255,17 @@ export default function Checkout() {
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error(error.response?.data?.message || error.message || 'An error occurred during checkout.');
+      let errorMessage = 'An error occurred during checkout.';
+      if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
+        errorMessage = 'Network error: Unable to connect to the server. Please check your internet connection and try again.';
+      } else if (error.code === 'ECONNABORTED') {
+        errorMessage = 'Request timed out. Please try again.';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      toast.error(errorMessage);
       setLoading(false);
     }
   };

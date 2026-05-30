@@ -39,7 +39,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://server:5000/api
+      - VITE_API_URL=http://localhost:5000/api
       - VITE_RAZORPAY_KEY_ID=${VITE_RAZORPAY_KEY_ID:-rzp_live_SvYV6qXPVp2QjK}
       - VITE_UPI_ID=${VITE_UPI_ID:-6374923162@naviaxis}
       - VITE_UPI_PAYEE_NAME=${VITE_UPI_PAYEE_NAME:-Sharp SK Brownies}
