@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 import errorHandler from './middleware/errorHandler.js';
 
@@ -10,7 +12,10 @@ import orderRoutes from './routes/orders.js';
 import authRoutes from './routes/auth.js';
 import paymentRoutes from './routes/payment.js';
 
-dotenv.config();
+// Load .env from server/ directory (not CWD which differs on Vercel)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
 
@@ -30,8 +35,12 @@ allowedOrigins.add('http://localhost:5173');
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow requests with no origin (e.g., mobile apps, server-to-server, same-origin)
       if (!origin) return callback(null, true);
+      // Allow if explicitly listed
       if (allowedOrigins.has(origin)) return callback(null, true);
+      // Allow any Vercel deployment (preview URLs change on every deploy)
+      if (origin.endsWith('.vercel.app')) return callback(null, true);
       callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
