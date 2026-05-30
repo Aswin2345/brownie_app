@@ -1,0 +1,16 @@
+{
+  "name": "sharp-sk-brownies-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sharp SK Brownies – Full-stack bakery website",
+  "scripts": {
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "postinstall": "npm run install:server && npm run install:client",
+    "build": "cd client && npm run build",
+    "start": "cd server && node server.js",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "seed": "cd server && npm run seed"
+  }
+}
