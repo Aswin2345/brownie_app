@@ -156,14 +156,29 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-14 pt-8 border-t border-chocolate-700/30">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-cream-dark/40 text-sm">
-              © {currentYear} Sharp SK Brownies. All rights reserved.
-            </p>
-            <div className="flex items-center gap-1 text-cream-dark/40 text-sm">
-              <span>Made with</span>
-              <span className="text-red-400">❤️</span>
-              <span>and lots of chocolate</span>
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Legal Links */}
+            <div className="flex flex-wrap items-center justify-center gap-4 text-cream-dark/60 text-sm">
+              <Link to="/terms" className="hover:text-gold-500 transition-colors">Terms & Conditions</Link>
+              <span className="hidden sm:inline">•</span>
+              <Link to="/privacy" className="hover:text-gold-500 transition-colors">Privacy Policy</Link>
+              <span className="hidden sm:inline">•</span>
+              <Link to="/refund" className="hover:text-gold-500 transition-colors">Refund Policy</Link>
+              <span className="hidden sm:inline">•</span>
+              <Link to="/shipping" className="hover:text-gold-500 transition-colors">Shipping Policy</Link>
+              <span className="hidden sm:inline">•</span>
+              <Link to="/faq" className="hover:text-gold-500 transition-colors">FAQ</Link>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <p className="text-cream-dark/40 text-sm text-center">
+                © {currentYear} Sharp SK Brownies. All rights reserved.
+              </p>
+              <div className="hidden sm:flex items-center gap-1 text-cream-dark/40 text-sm">
+                <span>Made with</span>
+                <span className="text-red-400">❤️</span>
+                <span>and chocolate</span>
+              </div>
             </div>
           </div>
         </div>

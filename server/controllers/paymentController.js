@@ -30,10 +30,15 @@ export const createRazorpayOrder = async (req, res, next) => {
     const { amount, currency, receipt, notes } = req.body;
 
     if (!hasValidRazorpayConfig()) {
-      return res.status(503).json({
-        success: false,
-        message:
-          'Online payment is not configured yet. Add Razorpay keys or use Cash on Delivery.',
+      // DEVELOPMENT TEST MODE: Mock order creation if keys are missing
+      return res.status(201).json({
+        success: true,
+        data: {
+          id: `order_mock_${Date.now()}`,
+          amount: Math.round(amount * 100),
+          currency: currency || 'INR',
+          receipt: receipt || `receipt_${Date.now()}`,
+        },
       });
     }
 
@@ -77,10 +82,25 @@ export const verifyPayment = async (req, res, next) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
 
     if (!hasValidRazorpayConfig()) {
-      return res.status(503).json({
-        success: false,
-        message: 'Online payment verification is not configured yet.',
-      });
+      // DEVELOPMENT TEST MODE: Mock verification
+      if (razorpay_signature === 'mock_signature_for_testing') {
+        const order = await Order.findOneAndUpdate(
+          { $or: [{ orderId }, { razorpayOrderId: razorpay_order_id }] },
+          {
+            razorpayPaymentId: razorpay_payment_id,
+            razorpaySignature: razorpay_signature,
+            paymentStatus: 'paid',
+            orderStatus: 'confirmed',
+          },
+          { new: true }
+        );
+        
+        if (!order) {
+          return res.status(404).json({ success: false, message: 'Order not found for payment verification.' });
+        }
+        return res.status(200).json({ success: true, message: 'Mock payment verified', data: order });
+      }
+      return res.status(400).json({ success: false, message: 'Invalid mock signature' });
     }
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {

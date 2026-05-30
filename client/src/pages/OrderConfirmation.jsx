@@ -51,7 +51,7 @@ export default function OrderConfirmation() {
             Order Placed <span className="gold-gradient-text">Successfully!</span>
           </h1>
           <p className="text-cream/70 max-w-md mx-auto mb-8 text-sm sm:text-base leading-relaxed">
-            Thank you for ordering with us. Send the order details to WhatsApp so we can confirm and prepare it quickly.
+            Your order has been placed successfully! You will receive an automated WhatsApp confirmation message shortly.
           </p>
 
           <div className="p-4 rounded-xl bg-chocolate-800/50 border border-gold-500/10 max-w-sm mx-auto mb-10 flex flex-col items-center justify-center gap-1">
@@ -122,7 +122,7 @@ export default function OrderConfirmation() {
               className="w-full sm:w-auto px-8 py-3.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold rounded-xl shadow-lg shadow-[#25D366]/10 flex items-center justify-center gap-2.5 transition-all hover:scale-[1.02] duration-300"
             >
               <FaWhatsapp size={22} />
-              <span>Send to WhatsApp</span>
+              <span>Chat with Support</span>
             </button>
             <Link
               to="/menu"

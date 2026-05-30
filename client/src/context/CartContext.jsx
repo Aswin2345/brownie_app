@@ -7,7 +7,13 @@ const CART_STORAGE_KEY = 'sharp_sk_cart';
 const getStoredCart = () => {
   try {
     const stored = localStorage.getItem(CART_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    // Remove fallback products (fb1, fb2, etc.) to prevent checkout errors
+    return parsed.filter(item => {
+      const idStr = String(item.id || '');
+      return !idStr.startsWith('fb') && idStr.length === 24; // Must be valid MongoDB ObjectId length
+    });
   } catch {
     return [];
   }

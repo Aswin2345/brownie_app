@@ -56,7 +56,7 @@ export default function AdminDashboard() {
     price: '',
     priceHalfKg: '',
     image: '',
-    category: 'brownie',
+    category: 'classic',
     available: true,
     featured: false,
   });
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
         price: '',
         priceHalfKg: '',
         image: '',
-        category: 'brownie',
+        category: 'classic',
         available: true,
         featured: false,
       });
@@ -151,9 +151,55 @@ export default function AdminDashboard() {
       toast.success('Product deleted.');
       fetchData();
     } catch (err) {
-      console.error('Product delete error:', err);
-      toast.error('Failed to delete product.');
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to delete product.');
     }
+  };
+
+  // Export Orders CSV
+  const exportOrdersCSV = () => {
+    if (orders.length === 0) {
+      toast.error('No orders to export.');
+      return;
+    }
+    
+    const headers = ['Order ID', 'Date', 'Customer Name', 'Phone', 'Address', 'City', 'Pincode', 'Total Amount', 'Payment Method', 'Payment Status', 'Order Status', 'Items'];
+    
+    const csvRows = orders.map(order => {
+      const date = new Date(order.createdAt).toLocaleString();
+      const customerName = order.customer?.name || '';
+      const phone = order.customer?.phone || '';
+      const address = order.customer?.address ? order.customer.address.replace(/"/g, '""') : '';
+      const city = order.customer?.city || '';
+      const pincode = order.customer?.pincode || '';
+      const itemsStr = order.items?.map(item => `${item.name} (x${item.quantity})`).join(' | ') || '';
+      
+      return [
+        order.orderId,
+        date,
+        customerName,
+        phone,
+        address,
+        city,
+        pincode,
+        order.totalAmount,
+        order.paymentMethod,
+        order.paymentStatus,
+        order.orderStatus,
+        itemsStr
+      ].map(val => `"${String(val).replace(/"/g, '""')}"`).join(',');
+    });
+    
+    const csvContent = [headers.join(','), ...csvRows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `brownies_orders_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success('Orders exported successfully!');
   };
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -397,8 +443,17 @@ export default function AdminDashboard() {
               <div className="glass-card border border-gold-500/10 overflow-hidden shadow-2xl relative">
                 <div className="p-6 border-b border-chocolate-850 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <h3 className="text-xl font-heading font-semibold text-cream">Order History</h3>
-                  <div className="text-xs text-cream-dark/60 font-medium">
-                    Showing {orders.length} orders
+                  <div className="flex items-center gap-4">
+                    <div className="text-xs text-cream-dark/60 font-medium">
+                      Showing {orders.length} orders
+                    </div>
+                    <button
+                      onClick={exportOrdersCSV}
+                      className="px-4 py-2 bg-chocolate-800 border border-gold-500/30 text-gold-500 text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-gold-500 hover:text-chocolate-900 transition-all flex items-center gap-2 shadow-lg shadow-gold-500/5"
+                    >
+                      <FileText size={14} />
+                      Download CSV
+                    </button>
                   </div>
                 </div>
 
@@ -713,8 +768,11 @@ export default function AdminDashboard() {
                       onChange={(e) => setProductForm(p => ({ ...p, category: e.target.value }))}
                       className="w-full px-4 py-3 rounded-xl bg-chocolate-900 border border-chocolate-700/50 focus:border-gold-500/50 text-cream transition-all duration-300 font-medium text-sm cursor-pointer"
                     >
-                      <option value="brownie">Brownie</option>
-                      <option value="other">Other Dessert</option>
+                      <option value="classic">Classic Brownies</option>
+                      <option value="chocolate">Chocolate Brownies</option>
+                      <option value="nut">Nut Brownies</option>
+                      <option value="premium">Premium Brownies</option>
+                      <option value="giftbox">Gift Boxes</option>
                     </select>
                   </div>
 

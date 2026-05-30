@@ -19,6 +19,11 @@ import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import Terms from './pages/policies/Terms';
+import Privacy from './pages/policies/Privacy';
+import Refund from './pages/policies/Refund';
+import Shipping from './pages/policies/Shipping';
+import FAQ from './pages/policies/FAQ';
 
 export default function App() {
   return (
@@ -44,6 +49,11 @@ export default function App() {
               <Route path="/order" element={<OrderOnline />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/refund" element={<Refund />} />
+              <Route path="/shipping" element={<Shipping />} />
+              <Route path="/faq" element={<FAQ />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>

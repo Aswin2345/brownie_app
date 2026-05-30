@@ -12,7 +12,7 @@ const products = [
     price: 40,
     priceHalfKg: 450,
     image: '/images/chocolate-brownie.png',
-    category: 'brownie',
+    category: 'chocolate',
     available: true,
     featured: true,
   },
@@ -22,7 +22,7 @@ const products = [
     price: 40,
     priceHalfKg: 450,
     image: '/images/white-chocolate-brownie.png',
-    category: 'brownie',
+    category: 'classic',
     available: true,
     featured: true,
   },
@@ -32,7 +32,7 @@ const products = [
     price: 40,
     priceHalfKg: 450,
     image: '/images/nutella-brownie.png',
-    category: 'brownie',
+    category: 'chocolate',
     available: true,
     featured: true,
   },
@@ -42,7 +42,7 @@ const products = [
     price: 40,
     priceHalfKg: 450,
     image: '/images/oreo-brownie.png',
-    category: 'brownie',
+    category: 'premium',
     available: true,
     featured: false,
   },
@@ -52,7 +52,7 @@ const products = [
     price: 50,
     priceHalfKg: 499,
     image: '/images/choco-lava-brownie.png',
-    category: 'brownie',
+    category: 'premium',
     available: true,
     featured: true,
   },
@@ -62,7 +62,7 @@ const products = [
     price: 50,
     priceHalfKg: 499,
     image: '/images/walnut-brownie.png',
-    category: 'brownie',
+    category: 'nut',
     available: true,
     featured: false,
   },
@@ -110,10 +110,9 @@ const seed = async () => {
 
     console.log('\nSeed completed successfully.');
     console.log('--------------------------------');
-    console.log('Admin Credentials:');
+    console.log('Admin Credentials (first-time setup only):');
     console.log(`  Email:    ${adminData.email}`);
-    console.log(`  Password: ${adminData.password}`);
-    console.log('--------------------------------');
+    console.log('  Password: [set in seed.js adminData — change after first login]');
 
     if (createdProducts.length) {
       console.log('\nProducts seeded:');

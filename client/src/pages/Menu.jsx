@@ -72,10 +72,26 @@ export default function Menu() {
     fetchProducts();
   }, []);
 
+  const [activeCategory, setActiveCategory] = useState('all');
+
+  const categories = [
+    { id: 'all', label: 'All Brownies' },
+    { id: 'classic', label: 'Classic' },
+    { id: 'chocolate', label: 'Chocolate' },
+    { id: 'nut', label: 'Nut' },
+    { id: 'premium', label: 'Premium' },
+    { id: 'giftbox', label: 'Gift Boxes' },
+  ];
+
+  const filteredProducts = products.filter(product => {
+    if (activeCategory === 'all') return true;
+    return product.category === activeCategory;
+  });
+
   return (
     <main className="pt-24 pb-20 min-h-screen">
       {/* Header */}
-      <div className="text-center px-4 mb-16">
+      <div className="text-center px-4 mb-10">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,6 +123,25 @@ export default function Menu() {
         </motion.p>
       </div>
 
+      {/* Category Tabs */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="flex overflow-x-auto pb-4 hide-scrollbar justify-start sm:justify-center gap-2 sm:gap-4">
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                activeCategory === category.id
+                  ? 'bg-gold-500 text-chocolate-900 shadow-lg shadow-gold-500/20'
+                  : 'bg-chocolate-900/50 text-cream-dark/80 hover:bg-chocolate-800 hover:text-cream border border-chocolate-800'
+              }`}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Product Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {loading ? (
@@ -131,11 +166,21 @@ export default function Menu() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <BrownieCard key={product._id || product.id} product={product} />
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-chocolate-900/30 rounded-3xl border border-chocolate-800/50">
+            <p className="text-cream-dark/60 text-lg">No brownies found in this category.</p>
+            <button 
+              onClick={() => setActiveCategory('all')}
+              className="mt-4 text-gold-500 hover:underline"
+            >
+              View all brownies
+            </button>
           </div>
         )}
       </div>

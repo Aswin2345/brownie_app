@@ -2,7 +2,11 @@
   "name": "sharp-sk-brownies-app",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Sharp SK Brownies – Full-stack bakery website",
+  "dependencies": {
+    "serverless-http": "^3.2.0"
+  },
   "scripts": {
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install",

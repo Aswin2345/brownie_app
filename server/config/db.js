@@ -1,12 +1,32 @@
 import mongoose from 'mongoose';
 
+const globalForMongoose = globalThis;
+
+if (!globalForMongoose.__mongooseCache) {
+  globalForMongoose.__mongooseCache = {
+    conn: null,
+    promise: null,
+  };
+}
+
+const cached = globalForMongoose.__mongooseCache;
+
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
-    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    if (cached.conn && mongoose.connection.readyState === 1) {
+      return cached.conn;
+    }
+
+    if (!cached.promise) {
+      cached.promise = mongoose.connect(process.env.MONGODB_URI).then((conn) => conn);
+    }
+
+    cached.conn = await cached.promise;
+    console.log(`✅ MongoDB connected: ${cached.conn.connection.host}`);
+    return cached.conn;
   } catch (error) {
-    console.error(`❌ MongoDB connection error: ${error.message}`);
-    process.exit(1);
+    cached.promise = null;
+    throw error;
   }
 };
 

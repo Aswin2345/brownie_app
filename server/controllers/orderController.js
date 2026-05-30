@@ -2,6 +2,7 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import mongoose from 'mongoose';
 import { isPondicherryAddress, SERVICE_AREA_MESSAGE } from '../utils/delivery.js';
+import { sendWhatsAppNotification } from '../services/whatsapp.js';
 
 const buildVerifiedItems = async (items) => {
   const productIds = items.map((item) => item.productId);
@@ -149,6 +150,15 @@ export const createOrder = async (req, res, next) => {
 
     const order = await Order.create(orderData);
 
+    // WHATSAPP: Send New Order Alert to Business Owner
+    const adminPhone = process.env.WHATSAPP_OWNER_NUMBER || '919876543210';
+    const itemsText = verifiedItems.map(item => `- ${item.name} (x${item.quantity})`).join('\n');
+    const notesText = notes ? `\n*Notes:* ${notes}` : '';
+    const msgToAdmin = `🔔 *New Order Received!*\n\n*Order ID:* ${order.orderId}\n*Customer:* ${customer.name}\n*Phone:* ${customer.phone}\n*Address:* ${customer.address}, ${customer.city} - ${customer.pincode}\n*Total:* ₹${calculatedTotal}\n*Payment Method:* ${paymentMethod.toUpperCase()}${notesText}\n\n*Items:*\n${itemsText}`;
+    
+    // Don't await so checkout remains fast
+    sendWhatsAppNotification(adminPhone, msgToAdmin).catch(console.error);
+
     res.status(201).json({
       success: true,
       message: 'Order placed successfully',
@@ -274,6 +284,22 @@ export const updateOrderStatus = async (req, res, next) => {
         success: false,
         message: 'Order not found',
       });
+    }
+
+    // WHATSAPP: Send Status Update to Customer
+    let statusMsg = '';
+    switch (orderStatus) {
+      case 'confirmed': statusMsg = 'has been confirmed and is in queue.'; break;
+      case 'preparing': statusMsg = 'is currently being prepared by our bakers.'; break;
+      case 'out_for_delivery': statusMsg = 'is out for delivery! 🚚'; break;
+      case 'delivered': statusMsg = 'has been delivered. Enjoy your brownies! 🍫'; break;
+      case 'cancelled': statusMsg = 'has been cancelled. Contact support for any queries.'; break;
+    }
+    
+    if (statusMsg) {
+       const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+       const msgToCustomer = `Hi ${order.customer.name}, your order *#${order.orderId}* from Sharp SK Brownies ${statusMsg}\n\nTrack your order here:\n${frontendUrl}/order-confirmation?orderId=${order.orderId}`;
+       sendWhatsAppNotification(order.customer.phone, msgToCustomer).catch(console.error);
     }
 
     res.status(200).json({

@@ -19,6 +19,13 @@ export const initiatePayment = async ({
   onSuccess,
   onFailure,
 }) => {
+  const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+  if (!razorpayKey) {
+    onFailure?.('Razorpay key is not configured. Please contact support.');
+    return;
+  }
+
   const loaded = await loadRazorpayScript();
   if (!loaded) {
     onFailure?.('Failed to load Razorpay SDK. Please check your internet connection.');
@@ -26,7 +33,7 @@ export const initiatePayment = async ({
   }
 
   const options = {
-    key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+    key: razorpayKey,
     amount: amount * 100,
     currency: 'INR',
     name: 'Sharp SK Brownies',
