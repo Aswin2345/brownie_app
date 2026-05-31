@@ -17,6 +17,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Warn if critical payment env vars are missing (common on Vercel when .env is gitignored)
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+  console.warn(
+    '⚠️  RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET not found in environment.',
+    'Payments will run in MOCK/TEST mode.',
+    'Set these in Vercel Dashboard → Settings → Environment Variables for production.'
+  );
+}
+
 const app = express();
 
 const allowedOrigins = new Set(
