@@ -29,8 +29,13 @@ export const createRazorpayOrder = async (req, res, next) => {
   try {
     const { amount, currency, receipt, notes } = req.body;
 
+    console.log('[Payment] create-order called, amount:', amount);
+    console.log('[Payment] RAZORPAY_KEY_ID present:', !!process.env.RAZORPAY_KEY_ID);
+    console.log('[Payment] hasValidConfig:', hasValidRazorpayConfig());
+
     if (!hasValidRazorpayConfig()) {
       // DEVELOPMENT TEST MODE: Mock order creation if keys are missing
+      console.log('[Payment] Using MOCK mode — Razorpay keys not configured');
       return res.status(201).json({
         success: true,
         data: {
@@ -58,7 +63,9 @@ export const createRazorpayOrder = async (req, res, next) => {
       notes: notes || {},
     };
 
+    console.log('[Payment] Calling Razorpay API to create order...');
     const razorpayOrder = await razorpay.orders.create(options);
+    console.log('[Payment] Razorpay order created:', razorpayOrder.id);
 
     res.status(201).json({
       success: true,
@@ -70,6 +77,7 @@ export const createRazorpayOrder = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error('[Payment] create-order error:', error.message);
     next(error);
   }
 };
