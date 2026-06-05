@@ -34,7 +34,7 @@ export default function Terms() {
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">1. Website Usage Terms</h2>
           <p className="text-cream/80 leading-relaxed mb-6">
-            By accessing and placing an order with Sharp SK Brownies, you confirm that you are in agreement with and bound by the terms of service contained in the Terms & Conditions outlined below. These terms apply to the entire website and any email or other type of communication between you and Sharp SK Brownies.
+            By accessing and placing an order with Aswin Brownies, you confirm that you are in agreement with and bound by the terms of service contained in the Terms & Conditions outlined below. These terms apply to the entire website and any email or other type of communication between you and Aswin Brownies.
           </p>
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">2. Product Availability</h2>
@@ -54,7 +54,7 @@ export default function Terms() {
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">5. Limitation of Liability</h2>
           <p className="text-cream/80 leading-relaxed mb-8">
-            Sharp SK Brownies shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use our products or services. Please check the ingredient list for any potential allergens before consuming our products.
+            Aswin Brownies shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use our products or services. Please check the ingredient list for any potential allergens before consuming our products.
           </p>
 
           <div className="mt-12 p-6 bg-chocolate-800/30 rounded-xl border border-chocolate-700/50 text-center">

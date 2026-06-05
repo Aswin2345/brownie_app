@@ -10,29 +10,25 @@ const fallbackProducts = [
     _id: 'fb1',
     name: 'Chocolate Brownie',
     price: 40,
+    priceHalfKg: 400,
     description: 'Rich dark chocolate brownie with intense cocoa flavor',
     image: '/images/chocolate-brownie.png',
   },
   {
     _id: 'fb2',
-    name: 'Nutella Brownie',
-    price: 40,
-    description: 'Gooey Nutella-swirled brownie with hazelnut richness',
-    image: '/images/nutella-brownie.png',
+    name: 'Double Chocolate Brownie',
+    price: 45,
+    priceHalfKg: 450,
+    description: 'Loaded with double the chocolate — extra fudgy and irresistibly rich',
+    image: '/images/double-chocolate-brownie.png',
   },
   {
     _id: 'fb3',
-    name: 'Choco Lava Brownie',
-    price: 50,
-    description: 'Molten center brownie with flowing chocolate lava',
-    image: '/images/choco-lava-brownie.png',
-  },
-  {
-    _id: 'fb4',
-    name: 'Walnut Brownie',
-    price: 50,
-    description: 'Classic brownie loaded with crunchy walnuts',
-    image: '/images/walnut-brownie.png',
+    name: 'White Chocolate Brownie',
+    price: 40,
+    priceHalfKg: 400,
+    description: 'Creamy white chocolate brownie with a buttery vanilla base',
+    image: '/images/white-chocolate-brownie.png',
   },
 ];
 
@@ -122,12 +118,19 @@ export default function FeaturedBrownies() {
                 {product.description}
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-gold-500 font-bold text-xl">
-                  ₹{product.price}
-                  <span className="text-cream-dark/40 text-xs font-normal ml-1">
-                    /piece
+                <div>
+                  <span className="text-gold-500 font-bold text-xl">
+                    ₹{product.price}
+                    <span className="text-cream-dark/40 text-xs font-normal ml-1">
+                      /piece
+                    </span>
                   </span>
-                </span>
+                  {product.priceHalfKg && (
+                    <p className="text-cream-dark/60 text-xs mt-1">
+                      Half kg: Rs.{product.priceHalfKg}
+                    </p>
+                  )}
+                </div>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}

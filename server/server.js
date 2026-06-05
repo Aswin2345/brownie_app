@@ -8,7 +8,7 @@ const startServer = async () => {
     await connectDB();
 
     app.listen(PORT, () => {
-      console.log(`🚀 Sharp SK Brownies server running on port ${PORT}`);
+      console.log(`🚀 Aswin Brownies server running on port ${PORT}`);
       console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
     });

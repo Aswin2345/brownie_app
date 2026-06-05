@@ -87,7 +87,7 @@ export default function CartDrawer() {
                   <AnimatePresence>
                     {items.map((item) => (
                       <motion.div
-                        key={item.id}
+                        key={item.cartId}
                         layout
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -112,6 +112,9 @@ export default function CartDrawer() {
                           <p className="text-gold-500 font-bold text-sm mt-0.5">
                             ₹{item.price * item.quantity}
                           </p>
+                          <p className="text-cream-dark/50 text-xs mt-0.5">
+                            {item.unitLabel} x Rs.{item.price}
+                          </p>
 
                           {/* Quantity Controls */}
                           <div className="flex items-center gap-3 mt-2">
@@ -119,7 +122,7 @@ export default function CartDrawer() {
                               <motion.button
                                 whileTap={{ scale: 0.85 }}
                                 onClick={() =>
-                                  updateQuantity(item.id, item.quantity - 1)
+                                  updateQuantity(item.cartId, item.quantity - 1)
                                 }
                                 className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:text-cream hover:border-gold-500/30 transition-all"
                               >
@@ -131,7 +134,7 @@ export default function CartDrawer() {
                               <motion.button
                                 whileTap={{ scale: 0.85 }}
                                 onClick={() =>
-                                  updateQuantity(item.id, item.quantity + 1)
+                                  updateQuantity(item.cartId, item.quantity + 1)
                                 }
                                 className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:text-cream hover:border-gold-500/30 transition-all"
                               >
@@ -140,7 +143,7 @@ export default function CartDrawer() {
                             </div>
                             <motion.button
                               whileTap={{ scale: 0.85 }}
-                              onClick={() => removeFromCart(item.id)}
+                              onClick={() => removeFromCart(item.cartId)}
                               className="p-1.5 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-all"
                             >
                               <Trash2 size={14} />

@@ -14,15 +14,19 @@ export default function OrderConfirmation() {
     return <Navigate to="/" replace />;
   }
 
+  const customerWhatsApp = order.notificationStatus?.customerWhatsApp;
+  const ownerWhatsApp = order.notificationStatus?.ownerWhatsApp;
+  const whatsappConfigured = Boolean(customerWhatsApp?.sent || ownerWhatsApp?.sent);
+
   const handleWhatsAppNotify = () => {
     const itemsText = order.items
-      .map((item) => `- ${item.name} x ${item.quantity} (Rs.${item.price})`)
+      .map((item) => `- ${item.name} (${item.unitLabel || 'Piece'}) x ${item.quantity} (Rs.${item.price})`)
       .join('\n');
     const paymentReference = order.upiTransactionId
       ? `\n*UPI Reference:* ${order.upiTransactionId}`
       : '';
 
-    const message = `New order for Sharp SK Brownies\n\n*Order ID:* ${order.orderId}\n*Name:* ${order.customer.name}\n*Phone:* ${order.customer.phone}\n*Address:* ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}\n*Items:*\n${itemsText}\n\n*Total Amount:* Rs.${order.totalAmount}\n*Payment Method:* ${order.paymentMethod.toUpperCase()}\n*Payment Status:* ${order.paymentStatus.toUpperCase().replaceAll('_', ' ')}${paymentReference}`;
+    const message = `New order for Aswin Brownies\n\n*Order ID:* ${order.orderId}\n*Name:* ${order.customer.name}\n*Phone:* ${order.customer.phone}\n*Address:* ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}\n*Items:*\n${itemsText}\n\n*Total Amount:* Rs.${order.totalAmount}\n*Payment Method:* ${order.paymentMethod.toUpperCase()}\n*Payment Status:* ${order.paymentStatus.toUpperCase().replaceAll('_', ' ')}${paymentReference}`;
 
     window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -51,7 +55,9 @@ export default function OrderConfirmation() {
             Order Placed <span className="gold-gradient-text">Successfully!</span>
           </h1>
           <p className="text-cream/70 max-w-md mx-auto mb-8 text-sm sm:text-base leading-relaxed">
-            Your order has been placed successfully! You will receive an automated WhatsApp confirmation message shortly.
+            {whatsappConfigured
+              ? 'Your order has been placed successfully! A WhatsApp confirmation has been sent.'
+              : 'Your order has been placed successfully! WhatsApp auto-message is not configured yet, so please use the WhatsApp button below if you want to message us instantly.'}
           </p>
 
           <div className="p-4 rounded-xl bg-chocolate-800/50 border border-gold-500/10 max-w-sm mx-auto mb-10 flex flex-col items-center justify-center gap-1">
@@ -103,7 +109,7 @@ export default function OrderConfirmation() {
                 {order.items.map((item, idx) => (
                   <div key={idx} className="flex justify-between items-center text-sm">
                     <span className="text-cream/80">
-                      {item.name} <span className="text-gold-500 font-semibold">x{item.quantity}</span>
+                      {item.name} <span className="text-cream-dark">({item.unitLabel || 'Piece'})</span> <span className="text-gold-500 font-semibold">x{item.quantity}</span>
                     </span>
                     <span className="font-medium text-cream">Rs.{item.price * item.quantity}</span>
                   </div>

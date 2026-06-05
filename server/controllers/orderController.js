@@ -29,11 +29,21 @@ const buildVerifiedItems = async (items) => {
       throw new Error('Each order item must have a valid quantity');
     }
 
+    const variant = item.variant === 'halfKg' ? 'halfKg' : 'piece';
+    const price = variant === 'halfKg' ? product.priceHalfKg : product.price;
+    const unitLabel = variant === 'halfKg' ? 'Half kg' : 'Piece';
+
+    if (variant === 'halfKg' && (!price || price <= 0)) {
+      throw new Error(`${product.name} is not available as half kg right now.`);
+    }
+
     return {
       productId: product._id,
       name: product.name,
       quantity,
-      price: product.price,
+      variant,
+      unitLabel,
+      price,
     };
   });
 };
@@ -78,6 +88,13 @@ export const createOrder = async (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: 'Valid total amount is required',
+      });
+    }
+
+    if (totalAmount <= 100) {
+      return res.status(400).json({
+        success: false,
+        message: 'Your order total must be more than Rs.100. Please add one more item to continue.',
       });
     }
 
@@ -151,18 +168,30 @@ export const createOrder = async (req, res, next) => {
     const order = await Order.create(orderData);
 
     // WHATSAPP: Send New Order Alert to Business Owner
-    const adminPhone = process.env.WHATSAPP_OWNER_NUMBER || '919876543210';
-    const itemsText = verifiedItems.map(item => `- ${item.name} (x${item.quantity})`).join('\n');
+    const adminPhone = process.env.WHATSAPP_OWNER_NUMBER || '916374923162';
+    const itemsText = verifiedItems.map(item => `- ${item.name} (${item.unitLabel} x ${item.quantity})`).join('\n');
     const notesText = notes ? `\n*Notes:* ${notes}` : '';
-    const msgToAdmin = `🔔 *New Order Received!*\n\n*Order ID:* ${order.orderId}\n*Customer:* ${customer.name}\n*Phone:* ${customer.phone}\n*Address:* ${customer.address}, ${customer.city} - ${customer.pincode}\n*Total:* ₹${calculatedTotal}\n*Payment Method:* ${paymentMethod.toUpperCase()}${notesText}\n\n*Items:*\n${itemsText}`;
+    const msgToAdmin = `New Order Received!\n\nOrder ID: ${order.orderId}\nCustomer: ${customer.name}\nPhone: ${customer.phone}\nAddress: ${customer.address}, ${customer.city} - ${customer.pincode}\nTotal: Rs.${calculatedTotal}\nPayment Method: ${paymentMethod.toUpperCase()}${notesText}\n\nItems:\n${itemsText}`;
     
-    // Don't await so checkout remains fast
-    sendWhatsAppNotification(adminPhone, msgToAdmin).catch(console.error);
+    // WHATSAPP: Send Order Confirmation to Customer
+    const customerItemsText = verifiedItems.map(item => `- ${item.name} (${item.unitLabel}) x ${item.quantity}`).join('\n');
+    const paymentInfo = paymentMethod === 'cod' ? 'Cash on Delivery' : paymentMethod === 'upi' ? 'UPI (Awaiting verification)' : 'Online Payment';
+    const msgToCustomer = `Thank you for ordering from Aswin Brownies!\n\nOrder ID: ${order.orderId}\n\nItems ordered:\n${customerItemsText}\n\nTotal: Rs.${calculatedTotal}\nPayment: ${paymentInfo}\nDelivery to: ${customer.address}, ${customer.city} - ${customer.pincode}\n\nWe will notify you when your order is being prepared. Thank you!`;
+    const [ownerWhatsApp, customerWhatsApp] = await Promise.all([
+      sendWhatsAppNotification(adminPhone, msgToAdmin),
+      sendWhatsAppNotification(customer.phone, msgToCustomer),
+    ]);
 
     res.status(201).json({
       success: true,
       message: 'Order placed successfully',
-      data: order,
+      data: {
+        ...order.toObject(),
+        notificationStatus: {
+          ownerWhatsApp,
+          customerWhatsApp,
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -291,14 +320,14 @@ export const updateOrderStatus = async (req, res, next) => {
     switch (orderStatus) {
       case 'confirmed': statusMsg = 'has been confirmed and is in queue.'; break;
       case 'preparing': statusMsg = 'is currently being prepared by our bakers.'; break;
-      case 'out_for_delivery': statusMsg = 'is out for delivery! 🚚'; break;
-      case 'delivered': statusMsg = 'has been delivered. Enjoy your brownies! 🍫'; break;
+      case 'out_for_delivery': statusMsg = 'is out for delivery!'; break;
+      case 'delivered': statusMsg = 'has been delivered. Enjoy your brownies!'; break;
       case 'cancelled': statusMsg = 'has been cancelled. Contact support for any queries.'; break;
     }
     
     if (statusMsg) {
        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-       const msgToCustomer = `Hi ${order.customer.name}, your order *#${order.orderId}* from Sharp SK Brownies ${statusMsg}\n\nTrack your order here:\n${frontendUrl}/order-confirmation?orderId=${order.orderId}`;
+       const msgToCustomer = `Hi ${order.customer.name}, your order *#${order.orderId}* from Aswin Brownies ${statusMsg}\n\nTrack your order here:\n${frontendUrl}/order-confirmation?orderId=${order.orderId}`;
        sendWhatsAppNotification(order.customer.phone, msgToCustomer).catch(console.error);
     }
 

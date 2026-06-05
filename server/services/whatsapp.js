@@ -26,12 +26,12 @@ export const sendWhatsAppNotification = async (toPhoneNumber, messageText) => {
   // DEVELOPMENT TEST MODE
   if (!token || !phoneId || token.includes('placeholder')) {
     console.log('\n=========================================');
-    console.log('📲 [MOCK WHATSAPP MESSAGE SENT]');
+    console.log('[MOCK WHATSAPP MESSAGE]');
     console.log(`To: +${formattedNumber}`);
     console.log('Message:');
     console.log(messageText);
     console.log('=========================================\n');
-    return true; // Pretend it succeeded
+    return { sent: false, mock: true, to: formattedNumber };
   }
 
   // PRODUCTION MODE (Real API Call)
@@ -55,10 +55,10 @@ export const sendWhatsAppNotification = async (toPhoneNumber, messageText) => {
     };
 
     const response = await axios.post(url, payload, { headers });
-    return response.data;
+    return { sent: true, mock: false, to: formattedNumber, data: response.data };
   } catch (error) {
     console.error('WhatsApp API Error:', error.response?.data || error.message);
     // Don't throw the error so that the main application (like checkout) doesn't crash
-    return false;
+    return { sent: false, mock: false, to: formattedNumber, error: error.response?.data || error.message };
   }
 };

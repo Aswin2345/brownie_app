@@ -1,9 +1,9 @@
 {
-  "name": "sharp-sk-brownies-app",
+  "name": "aswin-brownies-app",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Sharp SK Brownies – Full-stack bakery website",
+  "description": "Aswin Brownies – Full-stack bakery website",
   "dependencies": {
     "serverless-http": "^3.2.0"
   },

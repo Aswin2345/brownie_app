@@ -64,7 +64,7 @@ export default function Contact() {
     if (Object.keys(errs).length > 0) return;
 
     setSubmitting(true);
-    const subject = encodeURIComponent(`Sharp SK Brownies enquiry from ${formData.name}`);
+    const subject = encodeURIComponent(`Aswin Brownies enquiry from ${formData.name}`);
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\n${formData.message}`
     );
@@ -308,13 +308,13 @@ export default function Contact() {
                 <div className="flex items-center gap-3">
                   <motion.a
                     whileHover={{ scale: 1.1 }}
-                    href="https://www.instagram.com/__.sharp__.sk/"
+                    href="https://www.instagram.com/aswinbrownies/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-cream hover:border-purple-500/40 transition-all"
                   >
                     <FaInstagram size={18} />
-                    <span className="text-sm">@__.sharp__.sk</span>
+                    <span className="text-sm">@aswinbrownies</span>
                   </motion.a>
                   <motion.a
                     whileHover={{ scale: 1.1 }}

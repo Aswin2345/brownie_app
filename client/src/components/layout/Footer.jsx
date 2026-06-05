@@ -26,7 +26,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link to="/" className="inline-block mb-4">
               <h3 className="text-2xl font-heading font-bold gold-gradient-text">
-                Sharp SK Brownies
+                Aswin Brownies
               </h3>
             </Link>
             <p className="text-cream-dark/70 text-sm leading-relaxed mb-6">
@@ -36,7 +36,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <motion.a
                 whileHover={{ scale: 1.1, y: -2 }}
-                href="https://www.instagram.com/__.sharp__.sk/"
+                href="https://www.instagram.com/aswinbrownies/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-chocolate-800 border border-chocolate-700/50 flex items-center justify-center text-cream-dark hover:text-gold-500 hover:border-gold-500/30 transition-all duration-300"
@@ -172,7 +172,7 @@ export default function Footer() {
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <p className="text-cream-dark/40 text-sm text-center">
-                © {currentYear} Sharp SK Brownies. All rights reserved.
+                © {currentYear} Aswin Brownies. All rights reserved.
               </p>
               <div className="hidden sm:flex items-center gap-1 text-cream-dark/40 text-sm">
                 <span>Made with</span>

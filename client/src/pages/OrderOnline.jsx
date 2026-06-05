@@ -7,12 +7,9 @@ import { getProducts } from '../services/api';
 import toast from 'react-hot-toast';
 
 const fallbackProducts = [
-  { _id: 'fb1', name: 'Chocolate Brownie', price: 40, description: 'Rich dark chocolate brownie with intense cocoa flavor', image: '/images/chocolate-brownie.png' },
-  { _id: 'fb2', name: 'White Chocolate Brownie', price: 40, description: 'Creamy white chocolate brownie with a buttery vanilla base', image: '/images/white-chocolate-brownie.png' },
-  { _id: 'fb3', name: 'Nutella Brownie', price: 40, description: 'Gooey Nutella-swirled brownie with hazelnut richness', image: '/images/nutella-brownie.png' },
-  { _id: 'fb4', name: 'Oreo Brownie', price: 40, description: 'Crushed Oreo brownie with cookies & cream layers', image: '/images/oreo-brownie.png' },
-  { _id: 'fb5', name: 'Choco Lava Brownie', price: 50, description: 'Molten center brownie with flowing chocolate lava', image: '/images/choco-lava-brownie.png' },
-  { _id: 'fb6', name: 'Walnut Brownie', price: 50, description: 'Classic brownie loaded with crunchy walnuts', image: '/images/walnut-brownie.png' },
+  { _id: 'fb1', name: 'Chocolate Brownie', price: 40, priceHalfKg: 400, description: 'Rich dark chocolate brownie with intense cocoa flavor', image: '/images/chocolate-brownie.png' },
+  { _id: 'fb2', name: 'Double Chocolate Brownie', price: 45, priceHalfKg: 450, description: 'Loaded with double the chocolate - extra fudgy and irresistibly rich', image: '/images/double-chocolate-brownie.png' },
+  { _id: 'fb3', name: 'White Chocolate Brownie', price: 40, priceHalfKg: 400, description: 'Creamy white chocolate brownie with a buttery vanilla base', image: '/images/white-chocolate-brownie.png' },
 ];
 
 export default function OrderOnline() {
@@ -36,13 +33,14 @@ export default function OrderOnline() {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    toast.success(`${product.name} added!`);
+  const handleAddToCart = (product, variant = 'piece') => {
+    addToCart(product, variant);
+    const label = variant === 'halfKg' ? 'Half kg' : 'Piece';
+    toast.success(`${product.name} (${label}) added!`);
   };
 
-  const getItemQty = (productId) => {
-    const item = items.find((i) => i.id === productId || i.id === (productId));
+  const getItemQty = (productId, variant = 'piece') => {
+    const item = items.find((i) => i.cartId === `${productId}:${variant}`);
     return item ? item.quantity : 0;
   };
 
@@ -95,7 +93,9 @@ export default function OrderOnline() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {products.map((product, index) => {
-                  const qty = getItemQty(product._id || product.id);
+                  const productId = product._id || product.id;
+                  const pieceQty = getItemQty(productId, 'piece');
+                  const halfKgQty = getItemQty(productId, 'halfKg');
                   return (
                     <motion.div
                       key={product._id || product.id}
@@ -124,35 +124,58 @@ export default function OrderOnline() {
                             ₹{product.price}
                             <span className="text-cream-dark/30 text-xs font-normal ml-1">/piece</span>
                           </p>
-                          <div className="mt-2">
-                            {qty === 0 ? (
-                              <motion.button
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => handleAddToCart(product)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold-500/10 border border-gold-500/20 text-gold-500 text-xs font-medium hover:bg-gold-500 hover:text-chocolate-900 transition-all duration-300"
-                              >
-                                <ShoppingCart size={12} />
-                                Add to Cart
-                              </motion.button>
-                            ) : (
-                              <div className="flex items-center gap-2">
+                          {product.priceHalfKg && (
+                            <p className="text-cream-dark/60 text-xs mt-0.5">
+                              Half kg: Rs.{product.priceHalfKg}
+                            </p>
+                          )}
+                          <div className="mt-3 space-y-2">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-cream-dark/70 text-xs">Piece</span>
+                              {pieceQty === 0 ? (
                                 <motion.button
-                                  whileTap={{ scale: 0.85 }}
-                                  onClick={() => updateQuantity(product._id || product.id, qty - 1)}
-                                  className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:border-gold-500/30 transition-all"
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => handleAddToCart(product, 'piece')}
+                                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold-500/10 border border-gold-500/20 text-gold-500 text-xs font-medium hover:bg-gold-500 hover:text-chocolate-900 transition-all duration-300"
                                 >
-                                  <Minus size={12} />
+                                  <ShoppingCart size={12} />
+                                  Add
                                 </motion.button>
-                                <span className="w-6 text-center text-cream text-sm font-medium">
-                                  {qty}
-                                </span>
-                                <motion.button
-                                  whileTap={{ scale: 0.85 }}
-                                  onClick={() => updateQuantity(product._id || product.id, qty + 1)}
-                                  className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:border-gold-500/30 transition-all"
-                                >
-                                  <Plus size={12} />
-                                </motion.button>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <motion.button whileTap={{ scale: 0.85 }} onClick={() => updateQuantity(`${productId}:piece`, pieceQty - 1)} className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:border-gold-500/30 transition-all">
+                                    <Minus size={12} />
+                                  </motion.button>
+                                  <span className="w-6 text-center text-cream text-sm font-medium">{pieceQty}</span>
+                                  <motion.button whileTap={{ scale: 0.85 }} onClick={() => updateQuantity(`${productId}:piece`, pieceQty + 1)} className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:border-gold-500/30 transition-all">
+                                    <Plus size={12} />
+                                  </motion.button>
+                                </div>
+                              )}
+                            </div>
+                            {product.priceHalfKg && (
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-cream-dark/70 text-xs">Half kg</span>
+                                {halfKgQty === 0 ? (
+                                  <motion.button
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => handleAddToCart(product, 'halfKg')}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold-500/10 border border-gold-500/20 text-gold-500 text-xs font-medium hover:bg-gold-500 hover:text-chocolate-900 transition-all duration-300"
+                                  >
+                                    <ShoppingCart size={12} />
+                                    Add
+                                  </motion.button>
+                                ) : (
+                                  <div className="flex items-center gap-2">
+                                    <motion.button whileTap={{ scale: 0.85 }} onClick={() => updateQuantity(`${productId}:halfKg`, halfKgQty - 1)} className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:border-gold-500/30 transition-all">
+                                      <Minus size={12} />
+                                    </motion.button>
+                                    <span className="w-6 text-center text-cream text-sm font-medium">{halfKgQty}</span>
+                                    <motion.button whileTap={{ scale: 0.85 }} onClick={() => updateQuantity(`${productId}:halfKg`, halfKgQty + 1)} className="w-7 h-7 rounded-lg bg-chocolate-700/50 border border-chocolate-700 flex items-center justify-center text-cream-dark hover:border-gold-500/30 transition-all">
+                                      <Plus size={12} />
+                                    </motion.button>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
@@ -193,7 +216,7 @@ export default function OrderOnline() {
                     <div className="space-y-3 max-h-64 overflow-y-auto mb-6 pr-1">
                       {items.map((item) => (
                         <div
-                          key={item.id}
+                          key={item.cartId}
                           className="flex items-center gap-3 p-3 rounded-xl bg-chocolate-800/30 border border-chocolate-700/20"
                         >
                           <div className="w-10 h-10 rounded-lg bg-chocolate-700/20 flex-shrink-0 overflow-hidden p-0.5">
@@ -202,14 +225,14 @@ export default function OrderOnline() {
                           <div className="flex-1 min-w-0">
                             <p className="text-cream text-xs font-medium truncate">{item.name}</p>
                             <p className="text-cream-dark/40 text-xs">
-                              {item.quantity} × ₹{item.price}
+                              {item.unitLabel} x {item.quantity} x Rs.{item.price}
                             </p>
                           </div>
                           <p className="text-gold-500 text-sm font-bold flex-shrink-0">
-                            ₹{item.price * item.quantity}
+                            Rs.{item.price * item.quantity}
                           </p>
                           <button
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => removeFromCart(item.cartId)}
                             className="p-1 text-red-400/40 hover:text-red-400 transition-colors flex-shrink-0"
                           >
                             <Trash2 size={12} />
@@ -225,13 +248,24 @@ export default function OrderOnline() {
                       </div>
                     </div>
 
-                    <Link to="/checkout">
+                    {totalPrice <= 100 && (
+                      <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium text-center mb-3">
+                        Minimum order must be more than Rs.100. Add Rs.{101 - totalPrice} more.
+                      </div>
+                    )}
+
+                    <Link to={totalPrice > 100 ? "/checkout" : "#"} onClick={(e) => { if (totalPrice <= 100) e.preventDefault(); }}>
                       <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-chocolate-900 font-bold shadow-lg shadow-gold-500/20 transition-all duration-300"
+                        whileHover={totalPrice > 100 ? { scale: 1.02 } : {}}
+                        whileTap={totalPrice > 100 ? { scale: 0.98 } : {}}
+                        disabled={totalPrice <= 100}
+                        className={`w-full py-3.5 rounded-xl font-bold shadow-lg transition-all duration-300 ${
+                          totalPrice > 100
+                            ? 'bg-gradient-to-r from-gold-500 to-gold-400 text-chocolate-900 shadow-gold-500/20'
+                            : 'bg-chocolate-700/50 text-cream/40 cursor-not-allowed shadow-none'
+                        }`}
                       >
-                        Proceed to Checkout
+                        {totalPrice > 100 ? 'Proceed to Checkout' : 'Minimum above Rs.100'}
                       </motion.button>
                     </Link>
                   </>

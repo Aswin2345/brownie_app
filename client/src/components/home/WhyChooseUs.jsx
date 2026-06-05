@@ -57,7 +57,7 @@ export default function WhyChooseUs() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-cream mb-4"
           >
-            Why Choose <span className="gold-gradient-text">Sharp SK</span>
+            Why Choose <span className="gold-gradient-text">Aswin</span>
           </motion.h2>
           <motion.div
             initial={{ scaleX: 0 }}

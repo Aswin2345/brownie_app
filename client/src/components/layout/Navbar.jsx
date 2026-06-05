@@ -60,7 +60,7 @@ export default function Navbar() {
                 className="flex items-center"
               >
                 <span className="text-2xl sm:text-3xl font-heading font-bold gold-gradient-text tracking-wide">
-                  Sharp SK
+                  Aswin
                 </span>
                 <span className="text-xs sm:text-sm text-cream-dark ml-2 mt-2 font-light tracking-[0.2em] uppercase">
                   Brownies
@@ -179,7 +179,7 @@ export default function Navbar() {
                 <div className="mt-auto pb-10">
                   <div className="border-t border-chocolate-700/50 pt-6">
                     <p className="text-cream-dark text-sm">
-                      © {new Date().getFullYear()} Sharp SK Brownies
+                      © {new Date().getFullYear()} Aswin Brownies
                     </p>
                   </div>
                 </div>

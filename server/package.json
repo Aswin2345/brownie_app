@@ -1,7 +1,7 @@
 {
-  "name": "sharp-sk-brownies-server",
+  "name": "aswin-brownies-server",
   "version": "1.0.0",
-  "description": "Backend API for Sharp SK Brownies bakery website",
+  "description": "Backend API for Aswin Brownies bakery website",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -29,6 +29,6 @@
     "express",
     "mongodb"
   ],
-  "author": "Sharp SK Brownies",
+  "author": "Aswin Brownies",
   "license": "ISC"
 }

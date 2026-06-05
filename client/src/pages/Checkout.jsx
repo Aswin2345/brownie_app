@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { ShoppingBag, CreditCard, Truck, Lock, ChevronLeft, User, Phone, Mail, MapPin, Smartphone } from 'lucide-react';
+import { ShoppingBag, CreditCard, Truck, Lock, ChevronLeft, User, Phone, Mail, MapPin, Smartphone, AlertTriangle } from 'lucide-react';
+
+const MIN_ORDER_AMOUNT = 100;
 import { useCart } from '../context/CartContext';
 import { createOrder, createPaymentOrder, verifyPayment } from '../services/api';
 import { initiatePayment } from '../services/razorpay';
@@ -24,7 +26,7 @@ export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
   const upiId = import.meta.env.VITE_UPI_ID || '';
-  const upiPayeeName = import.meta.env.VITE_UPI_PAYEE_NAME || 'Sharp SK Brownies';
+  const upiPayeeName = import.meta.env.VITE_UPI_PAYEE_NAME || 'Aswin Brownies';
 
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cod'); // 'cod', 'upi', or 'razorpay'
@@ -77,21 +79,24 @@ export default function Checkout() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (totalPrice <= MIN_ORDER_AMOUNT) {
+      newErrors.minOrder = `Your order total must be more than Rs.${MIN_ORDER_AMOUNT}. Please add one more brownie to continue.`;
+    }
+    if (!formData.name.trim()) newErrors.name = 'Please enter your full name';
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = 'Please enter your phone number';
     } else if (!/^\d{10}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
       newErrors.phone = 'Please enter a valid 10-digit phone number';
     }
     if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    if (!formData.address.trim()) newErrors.address = 'Delivery address is required';
-    if (!formData.city.trim()) newErrors.city = 'City is required';
+    if (!formData.address.trim()) newErrors.address = 'Please enter your delivery address';
+    if (!formData.city.trim()) newErrors.city = 'Please enter your city name';
     if (!formData.pincode.trim()) {
-      newErrors.pincode = 'Pincode is required';
+      newErrors.pincode = 'Please enter your area pincode';
     } else if (!/^\d{6}$/.test(formData.pincode)) {
-      newErrors.pincode = 'Please enter a valid 6-digit pincode';
+      newErrors.pincode = 'Pincode must be exactly 6 digits';
     }
     if (
       formData.city.trim() &&
@@ -124,7 +129,7 @@ export default function Checkout() {
     upiUrl.searchParams.set('pn', upiPayeeName);
     upiUrl.searchParams.set('am', String(totalPrice));
     upiUrl.searchParams.set('cu', 'INR');
-    upiUrl.searchParams.set('tn', `Sharp SK Brownies order ${Date.now()}`);
+    upiUrl.searchParams.set('tn', `Aswin Brownies order ${Date.now()}`);
 
     window.location.href = upiUrl.toString();
   };
@@ -133,7 +138,7 @@ export default function Checkout() {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Please fix the errors in the form.');
+      toast.error('Please check the highlighted fields and try again.');
       return;
     }
 
@@ -143,6 +148,7 @@ export default function Checkout() {
       items: items.map(item => ({
         productId: item.id,
         name: item.name,
+        variant: item.variant || 'piece',
         quantity: item.quantity,
         price: item.price
       })),
@@ -308,6 +314,29 @@ export default function Checkout() {
               </div>
 
               <form onSubmit={handlePlaceOrder} className="space-y-6">
+                {/* Error Summary Banner */}
+                {Object.keys(errors).length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 backdrop-blur-sm"
+                  >
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="text-red-400 flex-shrink-0 mt-0.5" size={20} />
+                      <div>
+                        <p className="text-red-400 font-semibold text-sm mb-1">Please check these details:</p>
+                        <ul className="space-y-1">
+                          {Object.values(errors).map((error, idx) => (
+                            <li key={idx} className="text-red-300/90 text-sm flex items-center gap-2">
+                              <span className="w-1 h-1 rounded-full bg-red-400 flex-shrink-0" />
+                              {error}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Name */}
                   <div className="relative">
@@ -329,7 +358,7 @@ export default function Checkout() {
                         placeholder="John Doe"
                       />
                     </div>
-                    {errors.name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.name}</p>}
+                    {errors.name && <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.name}</p>}
                   </div>
 
                   {/* Phone */}
@@ -352,7 +381,7 @@ export default function Checkout() {
                         placeholder="9876543210"
                       />
                     </div>
-                    {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
+                    {errors.phone && <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.phone}</p>}
                   </div>
                 </div>
 
@@ -376,7 +405,7 @@ export default function Checkout() {
                       placeholder="john@example.com"
                     />
                   </div>
-                  {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>}
+                  {errors.email && <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.email}</p>}
                 </div>
 
                 {/* Address */}
@@ -399,7 +428,7 @@ export default function Checkout() {
                       placeholder="Flat/House No., Building Name, Street Address"
                     />
                   </div>
-                  {errors.address && <p className="text-red-500 text-xs mt-1 font-medium">{errors.address}</p>}
+                  {errors.address && <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.address}</p>}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -418,7 +447,7 @@ export default function Checkout() {
                       } text-cream transition-all duration-300 font-medium`}
                       placeholder="Pondicherry"
                     />
-                    {errors.city && <p className="text-red-500 text-xs mt-1 font-medium">{errors.city}</p>}
+                    {errors.city && <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.city}</p>}
                   </div>
 
                   {/* Pincode */}
@@ -437,7 +466,7 @@ export default function Checkout() {
                       placeholder="605001"
                       maxLength="6"
                     />
-                    {errors.pincode && <p className="text-red-500 text-xs mt-1 font-medium">{errors.pincode}</p>}
+                    {errors.pincode && <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.pincode}</p>}
                   </div>
                 </div>
 
@@ -563,7 +592,7 @@ export default function Checkout() {
                           placeholder="Example: 412345678901"
                         />
                         {errors.upiTransactionId && (
-                          <p className="text-red-500 text-xs mt-1 font-medium">{errors.upiTransactionId}</p>
+                          <p className="text-red-400 text-sm mt-2 font-medium flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-lg"><AlertTriangle size={14} />{errors.upiTransactionId}</p>
                         )}
                       </div>
                     </div>
@@ -606,7 +635,7 @@ export default function Checkout() {
 
               <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 mb-8 custom-scrollbar">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 items-center justify-between">
+                  <div key={item.cartId} className="flex gap-4 items-center justify-between">
                     <div className="flex gap-3 items-center">
                       <div className="w-14 h-14 rounded-lg overflow-hidden border border-gold-500/10 relative flex-shrink-0">
                         <img
@@ -620,7 +649,7 @@ export default function Checkout() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-cream text-sm sm:text-base line-clamp-1">{item.name}</h4>
-                        <p className="text-xs text-cream-dark">₹{item.price} each</p>
+                        <p className="text-xs text-cream-dark">{item.unitLabel} x Rs.{item.price}</p>
                       </div>
                     </div>
                     <span className="font-semibold text-cream">₹{item.price * item.quantity}</span>

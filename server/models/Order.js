@@ -16,6 +16,15 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
       min: [1, 'Quantity must be at least 1'],
     },
+    variant: {
+      type: String,
+      enum: ['piece', 'halfKg'],
+      default: 'piece',
+    },
+    unitLabel: {
+      type: String,
+      default: 'Piece',
+    },
     price: {
       type: Number,
       required: true,
@@ -125,7 +134,7 @@ const orderSchema = new mongoose.Schema({
 // Auto-generate orderId before saving
 orderSchema.pre('save', function (next) {
   if (!this.orderId) {
-    this.orderId = 'SK-' + Date.now();
+    this.orderId = 'AB-' + Date.now();
   }
   next();
 });

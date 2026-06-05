@@ -92,7 +92,7 @@ const paymentLimiter = rateLimit({
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Sharp SK Brownies API is running 🍫',
+    message: 'Aswin Brownies API is running 🍫',
     timestamp: new Date().toISOString(),
   });
 });

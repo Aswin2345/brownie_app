@@ -11,7 +11,7 @@ services:
     build: ./server
     command: npm run seed
     environment:
-      - MONGODB_URI=mongodb://mongo:27017/sharp-sk-brownies
+      - MONGODB_URI=mongodb://mongo:27017/aswin-brownies
     depends_on:
       - mongo
     restart: "no"
@@ -22,14 +22,14 @@ services:
       - "5000:5000"
     environment:
       - PORT=5000
-      - MONGODB_URI=mongodb://mongo:27017/sharp-sk-brownies
+      - MONGODB_URI=mongodb://mongo:27017/aswin-brownies
       - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret-change-me}
       - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID:-rzp_live_SvYV6qXPVp2QjK}
       - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET:-45eT7p42ropsMe76s2TRk8D7}
       - FRONTEND_URL=http://localhost:5173
       - WHATSAPP_TOKEN=${WHATSAPP_TOKEN:-whatsapp_placeholder_token}
       - WHATSAPP_PHONE_ID=${WHATSAPP_PHONE_ID:-whatsapp_placeholder_phone_id}
-      - WHATSAPP_OWNER_NUMBER=${WHATSAPP_OWNER_NUMBER:-919876543210}
+      - WHATSAPP_OWNER_NUMBER=${WHATSAPP_OWNER_NUMBER:-916374923162}
     depends_on:
       seed:
         condition: service_completed_successfully
@@ -42,7 +42,7 @@ services:
       - VITE_API_URL=http://localhost:5000/api
       - VITE_RAZORPAY_KEY_ID=${VITE_RAZORPAY_KEY_ID:-rzp_live_SvYV6qXPVp2QjK}
       - VITE_UPI_ID=${VITE_UPI_ID:-6374923162@naviaxis}
-      - VITE_UPI_PAYEE_NAME=${VITE_UPI_PAYEE_NAME:-Sharp SK Brownies}
+      - VITE_UPI_PAYEE_NAME=${VITE_UPI_PAYEE_NAME:-Aswin Brownies}
     depends_on:
       - server
 

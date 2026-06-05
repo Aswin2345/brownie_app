@@ -7,9 +7,10 @@ import toast from 'react-hot-toast';
 export default function BrownieCard({ product }) {
   const { addToCart } = useCart();
 
-  const handleAddToCart = () => {
-    addToCart(product);
-    toast.success(`${product.name} added to cart!`);
+  const handleAddToCart = (variant = 'piece') => {
+    addToCart(product, variant);
+    const label = variant === 'halfKg' ? 'Half kg' : 'Piece';
+    toast.success(`${product.name} (${label}) added to cart!`);
   };
 
   return (
@@ -47,16 +48,34 @@ export default function BrownieCard({ product }) {
           <div>
             <span className="text-gold-500 font-bold text-xl">₹{product.price}</span>
             <span className="text-cream-dark/40 text-xs ml-1">/piece</span>
+            {product.priceHalfKg && (
+              <p className="text-cream-dark/60 text-xs mt-1">
+                Half kg: Rs.{product.priceHalfKg}
+              </p>
+            )}
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleAddToCart}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gold-500/10 border border-gold-500/20 text-gold-500 hover:bg-gold-500 hover:text-chocolate-900 text-sm font-medium transition-all duration-300"
-          >
-            <ShoppingCart size={16} />
-            <span>Add to Cart</span>
-          </motion.button>
+          <div className="flex flex-col gap-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleAddToCart('piece')}
+              className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gold-500/10 border border-gold-500/20 text-gold-500 hover:bg-gold-500 hover:text-chocolate-900 text-sm font-medium transition-all duration-300"
+            >
+              <ShoppingCart size={16} />
+              <span>Piece</span>
+            </motion.button>
+            {product.priceHalfKg && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleAddToCart('halfKg')}
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gold-500/10 border border-gold-500/20 text-gold-500 hover:bg-gold-500 hover:text-chocolate-900 text-sm font-medium transition-all duration-300"
+              >
+                <ShoppingCart size={16} />
+                <span>Half kg</span>
+              </motion.button>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>

@@ -172,7 +172,7 @@ export default function AdminDashboard() {
       const address = order.customer?.address ? order.customer.address.replace(/"/g, '""') : '';
       const city = order.customer?.city || '';
       const pincode = order.customer?.pincode || '';
-      const itemsStr = order.items?.map(item => `${item.name} (x${item.quantity})`).join(' | ') || '';
+      const itemsStr = order.items?.map(item => `${item.name} (${item.unitLabel || 'Piece'} x ${item.quantity})`).join(' | ') || '';
       
       return [
         order.orderId,
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
       {/* Sidebar - Desktop */}
       <aside className="hidden lg:flex flex-col w-64 border-r border-gold-500/10 bg-chocolate-950 p-6 flex-shrink-0">
         <div className="mb-10">
-          <h2 className="text-2xl font-heading font-bold gold-gradient-text">Sharp SK</h2>
+          <h2 className="text-2xl font-heading font-bold gold-gradient-text">Aswin</h2>
           <p className="text-xs uppercase tracking-widest text-cream-dark/60 font-semibold mt-1">Admin Panel</p>
         </div>
 
@@ -304,7 +304,7 @@ export default function AdminDashboard() {
             >
               <div className="flex justify-between items-center mb-10">
                 <div>
-                  <h2 className="text-2xl font-heading font-bold gold-gradient-text">Sharp SK</h2>
+                  <h2 className="text-2xl font-heading font-bold gold-gradient-text">Aswin</h2>
                   <p className="text-xs uppercase tracking-widest text-cream-dark/60 mt-1">Admin Panel</p>
                 </div>
                 <button
@@ -490,7 +490,7 @@ export default function AdminDashboard() {
                               <div className="text-xs space-y-1">
                                 {order.items?.map((it, idx) => (
                                   <div key={idx} className="truncate">
-                                    {it.name} <span className="text-gold-500 font-bold">x{it.quantity}</span>
+                                    {it.name} <span className="text-cream-dark">({it.unitLabel || 'Piece'})</span> <span className="text-gold-500 font-bold">x{it.quantity}</span>
                                   </div>
                                 ))}
                                 {order.notes && (
@@ -753,7 +753,7 @@ export default function AdminDashboard() {
                       value={productForm.name}
                       onChange={(e) => setProductForm(p => ({ ...p, name: e.target.value }))}
                       className="w-full px-4 py-3 rounded-xl bg-chocolate-900 border border-chocolate-700/50 focus:border-gold-500/50 text-cream transition-all duration-300 font-medium text-sm"
-                      placeholder="e.g. Nutella Brownie"
+                      placeholder="e.g. Double Chocolate Brownie"
                       required
                     />
                   </div>
@@ -830,10 +830,10 @@ export default function AdminDashboard() {
                     value={productForm.image}
                     onChange={(e) => setProductForm(p => ({ ...p, image: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl bg-chocolate-900 border border-chocolate-700/50 focus:border-gold-500/50 text-cream transition-all duration-300 font-medium text-sm"
-                    placeholder="e.g. /images/nutella-brownie.png"
+                    placeholder="e.g. /images/double-chocolate-brownie.png"
                   />
                   <p className="text-[10px] text-cream-dark/50 mt-1.5">
-                    Recommended local paths: /images/chocolate-brownie.png, nutella-brownie.png, oreo-brownie.png, walnut-brownie.png, choco-lava-brownie.png, white-chocolate-brownie.png
+                    Recommended local paths: /images/chocolate-brownie.png, double-chocolate-brownie.png, white-chocolate-brownie.png
                   </p>
                 </div>
 

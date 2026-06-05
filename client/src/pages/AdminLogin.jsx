@@ -72,7 +72,7 @@ export default function AdminLogin() {
           {/* Logo & Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-heading font-bold gold-gradient-text tracking-wide mb-2">
-              Sharp SK
+              Aswin
             </h1>
             <p className="text-xs uppercase tracking-[0.25em] text-cream-dark font-medium mb-6">
               Administration Portal
@@ -112,7 +112,7 @@ export default function AdminLogin() {
                     setError('');
                   }}
                   className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-chocolate-850 border border-chocolate-700/50 focus:border-gold-500/50 text-cream transition-all duration-300 font-medium text-sm"
-                  placeholder="admin@sharpsk.com"
+                  placeholder="admin@aswinbrownies.com"
                   required
                 />
               </div>

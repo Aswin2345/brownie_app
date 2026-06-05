@@ -99,7 +99,7 @@ export default function About() {
             transition={{ delay: 0.4 }}
             className="text-cream-dark/60 text-lg leading-relaxed max-w-3xl mx-auto"
           >
-            Sharp SK Brownies was born from a simple passion — to create the most delicious, 
+            Aswin Brownies was born from a simple passion — to create the most delicious, 
             fudgy brownies using only the finest ingredients. What started as a home kitchen 
             experiment has grown into a beloved brand that delivers premium handcrafted brownies 
             to chocolate lovers everywhere.
@@ -231,11 +231,8 @@ export default function About() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 '/images/chocolate-brownie.png',
-                '/images/nutella-brownie.png',
-                '/images/choco-lava-brownie.png',
+                '/images/double-chocolate-brownie.png',
                 '/images/white-chocolate-brownie.png',
-                '/images/oreo-brownie.png',
-                '/images/walnut-brownie.png',
               ].map((src, i) => (
                 <motion.div
                   key={i}

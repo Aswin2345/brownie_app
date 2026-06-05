@@ -36,7 +36,7 @@ export const initiatePayment = async ({
     key: razorpayKey,
     amount: amount * 100,
     currency: 'INR',
-    name: 'Sharp SK Brownies',
+    name: 'Aswin Brownies',
     description: 'Premium Handcrafted Brownies',
     order_id: orderId,
     handler: (response) => {

@@ -4,11 +4,8 @@ import { FaInstagram } from 'react-icons/fa';
 
 const images = [
   { src: '/images/chocolate-brownie.png', alt: 'Chocolate Brownie' },
+  { src: '/images/double-chocolate-brownie.png', alt: 'Double Chocolate Brownie' },
   { src: '/images/white-chocolate-brownie.png', alt: 'White Chocolate Brownie' },
-  { src: '/images/nutella-brownie.png', alt: 'Nutella Brownie' },
-  { src: '/images/oreo-brownie.png', alt: 'Oreo Brownie' },
-  { src: '/images/choco-lava-brownie.png', alt: 'Choco Lava Brownie' },
-  { src: '/images/walnut-brownie.png', alt: 'Walnut Brownie' },
 ];
 
 export default function InstagramSection() {
@@ -23,7 +20,7 @@ export default function InstagramSection() {
             viewport={{ once: true }}
             className="text-gold-500 text-sm tracking-[0.3em] uppercase mb-3 font-medium"
           >
-            @__.sharp__.sk
+            @aswinbrownies
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -48,7 +45,7 @@ export default function InstagramSection() {
           {images.map((image, index) => (
             <motion.a
               key={index}
-              href="https://www.instagram.com/__.sharp__.sk/"
+              href="https://www.instagram.com/aswinbrownies/"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -89,7 +86,7 @@ export default function InstagramSection() {
           className="text-center mt-10"
         >
           <a
-            href="https://www.instagram.com/__.sharp__.sk/"
+            href="https://www.instagram.com/aswinbrownies/"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -99,7 +96,7 @@ export default function InstagramSection() {
               className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full border border-gold-500/30 text-gold-500 font-medium hover:bg-gold-500/10 transition-all duration-300"
             >
               <FaInstagram size={20} />
-              <span>Follow @__.sharp__.sk</span>
+              <span>Follow @aswinbrownies</span>
             </motion.button>
           </a>
         </motion.div>

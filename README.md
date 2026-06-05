@@ -1,4 +1,4 @@
-# Sharp SK Brownies
+# Aswin Brownies
 
 Premium brownie ordering app with a React client, Express API, MongoDB, admin dashboard, WhatsApp contact, Cash on Delivery, and Razorpay online payments.
 
@@ -23,7 +23,7 @@ Server:
 
 ```env
 PORT=5000
-MONGODB_URI=mongodb://mongo:27017/sharp-sk-brownies
+MONGODB_URI=mongodb://mongo:27017/aswin-brownies
 JWT_SECRET=change-this-secret
 RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
@@ -36,7 +36,7 @@ Client:
 VITE_API_URL=http://localhost:5000/api
 VITE_RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
 VITE_UPI_ID=your-upi-id@bank
-VITE_UPI_PAYEE_NAME=Sharp SK Brownies
+VITE_UPI_PAYEE_NAME=Aswin Brownies
 ```
 
 ## Payment Flow
@@ -71,9 +71,9 @@ Direct UPI is intentionally marked `awaiting_verification` because UPI deep link
 
 ## WhatsApp Order Details
 
-After order confirmation, the customer gets a "Send to WhatsApp" button. It opens WhatsApp to +91 6374923162 with the full order details, address, total, payment method, and UPI reference if available.
+After order creation, the backend sends WhatsApp notifications to the business owner and the customer with the order ID, items, address, total, and payment method.
 
-Fully automatic WhatsApp messages require WhatsApp Business Cloud API or a provider such as Twilio/Interakt/WATI with approved templates and API credentials.
+Fully automatic WhatsApp delivery requires valid `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_ID`, and `WHATSAPP_OWNER_NUMBER` values. With placeholder values, the API logs a mock message instead.
 
 ## Admin
 
@@ -82,12 +82,12 @@ Admin dashboard: http://localhost:5173/admin/login
 Seed data creates the default admin:
 
 ```text
-Email: admin@sharpsk.com
-Password: SharpSK@2024
+Email: admin@aswinbrownies.com
+Password: Aswin@2024
 ```
 
 ## Contact
 
 Phone / WhatsApp: +91 6374923162  
 Email: aswincse2@gmail.com  
-Instagram: https://www.instagram.com/__.sharp__.sk/
+Instagram: https://www.instagram.com/aswinbrownies/

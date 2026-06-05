@@ -34,7 +34,7 @@ export default function Shipping() {
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">1. Delivery Areas</h2>
           <p className="text-cream/80 leading-relaxed mb-6">
-            Currently, Sharp SK Brownies only delivers to addresses within <strong>Pondicherry (Puducherry)</strong>. Our system verifies your pincode (must start with 605) during checkout. We do not offer nationwide shipping at this time to ensure the freshness and quality of our products.
+            Currently, Aswin Brownies only delivers to addresses within <strong>Pondicherry (Puducherry)</strong>. Our system verifies your pincode (must start with 605) during checkout. We do not offer nationwide shipping at this time to ensure the freshness and quality of our products.
           </p>
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">2. Delivery Timelines</h2>

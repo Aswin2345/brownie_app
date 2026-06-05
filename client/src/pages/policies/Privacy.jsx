@@ -34,7 +34,7 @@ export default function Privacy() {
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">1. Information We Collect</h2>
           <p className="text-cream/80 leading-relaxed mb-6">
-            When you visit Sharp SK Brownies, place an order, or contact us, we collect personal information that you provide to us voluntarily. This includes your name, email address, phone number, shipping address, and payment details.
+            When you visit Aswin Brownies, place an order, or contact us, we collect personal information that you provide to us voluntarily. This includes your name, email address, phone number, shipping address, and payment details.
           </p>
 
           <h2 className="text-2xl font-heading font-semibold text-gold-500 mt-8 mb-4">2. Payment Information Handling</h2>

@@ -57,7 +57,7 @@ export default function LoadingScreen() {
             transition={{ delay: 0.3 }}
             className="text-3xl sm:text-4xl font-heading font-bold gold-gradient-text mb-3"
           >
-            Sharp SK Brownies
+            Aswin Brownies
           </motion.h1>
 
           <motion.p
