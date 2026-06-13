@@ -28,6 +28,20 @@ const fallbackProducts = [
     description: 'Creamy white chocolate brownie with a buttery vanilla base',
     image: '/images/white-chocolate-brownie.png',
   },
+  {
+    _id: 'fb4',
+    name: 'Brownie Tub',
+    price: 120,
+    description: 'A delightful tub filled with layers of brownie and rich chocolate sauce',
+    image: '/images/brownie-tub.png',
+  },
+  {
+    _id: 'fb5',
+    name: 'White Sauce Pasta',
+    price: 120,
+    description: 'Creamy and cheesy classic white sauce pasta',
+    image: '/images/white-sauce-pasta.png',
+  },
 ];
 
 export default function Menu() {
@@ -62,6 +76,7 @@ export default function Menu() {
     { id: 'chocolate', label: 'Chocolate' },
     { id: 'nut', label: 'Nut' },
     { id: 'premium', label: 'Premium' },
+    { id: 'savory', label: 'Savory' },
     { id: 'giftbox', label: 'Gift Boxes' },
   ];
 

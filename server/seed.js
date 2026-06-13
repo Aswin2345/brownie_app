@@ -60,6 +60,8 @@ const retiredProductNames = [
   'Chocolate Walnut Brownie',
   'Choco Lava Brownie',
   'Nutella Brownie',
+  'Oreo Brownie',
+  'Walnut Brownie',
 ];
 
 const adminData = {
