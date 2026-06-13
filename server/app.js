@@ -97,36 +97,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ---- Temporary seed endpoint (remove after seeding) ----
-app.get('/api/seed-menu', async (req, res) => {
-  try {
-    const Product = (await import('./models/Product.js')).default;
-
-    const products = [
-      { name: 'Chocolate Brownie', description: 'Rich dark chocolate brownie with intense cocoa flavor', price: 40, priceHalfKg: 400, image: '/images/chocolate-brownie.png', category: 'chocolate', available: true, featured: true },
-      { name: 'Double Chocolate Brownie', description: 'Loaded with double the chocolate — extra fudgy and irresistibly rich', price: 45, priceHalfKg: 450, image: '/images/double-chocolate-brownie.png', category: 'chocolate', available: true, featured: true },
-      { name: 'White Chocolate Brownie', description: 'Creamy white chocolate brownie with a buttery vanilla base', price: 40, priceHalfKg: 400, image: '/images/white-chocolate-brownie.png', category: 'classic', available: true, featured: true },
-      { name: 'Brownie Tub', description: 'A delightful tub filled with layers of brownie and rich chocolate sauce', price: 120, image: '/images/brownie-tub.png', category: 'chocolate', available: true, featured: true },
-      { name: 'White Sauce Pasta', description: 'Creamy and cheesy classic white sauce pasta', price: 120, image: '/images/white-sauce-pasta.png', category: 'savory', available: true, featured: true },
-    ];
-
-    const retiredNames = ['Chocolate Walnut Brownie', 'Choco Lava Brownie', 'Nutella Brownie'];
-
-    await Product.deleteMany({ name: { $in: retiredNames } });
-
-    const synced = await Promise.all(
-      products.map((p) =>
-        Product.findOneAndUpdate({ name: p.name }, p, { upsert: true, new: true, setDefaultsOnInsert: true })
-      )
-    );
-
-    res.json({ success: true, message: `${synced.length} products synced, retired items removed`, products: synced.map(p => p.name) });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-// ---- End temporary seed endpoint ----
-
 app.use('/api/products', apiLimiter, productRoutes);
 app.use('/api/orders', orderLimiter, orderRoutes);
 app.use('/api/auth', apiLimiter, authRoutes);
