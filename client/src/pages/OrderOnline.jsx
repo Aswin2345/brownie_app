@@ -10,6 +10,8 @@ const fallbackProducts = [
   { _id: 'fb1', name: 'Chocolate Brownie', price: 40, priceHalfKg: 400, description: 'Rich dark chocolate brownie with intense cocoa flavor', image: '/images/chocolate-brownie.png' },
   { _id: 'fb2', name: 'Double Chocolate Brownie', price: 45, priceHalfKg: 450, description: 'Loaded with double the chocolate - extra fudgy and irresistibly rich', image: '/images/double-chocolate-brownie.png' },
   { _id: 'fb3', name: 'White Chocolate Brownie', price: 40, priceHalfKg: 400, description: 'Creamy white chocolate brownie with a buttery vanilla base', image: '/images/white-chocolate-brownie.png' },
+  { _id: 'fb4', name: 'Brownie Tub', price: 120, description: 'A delightful tub filled with layers of brownie and rich chocolate sauce', image: '/images/brownie-tub.png' },
+  { _id: 'fb5', name: 'White Sauce Pasta', price: 120, description: 'Creamy and cheesy classic white sauce pasta', image: '/images/white-sauce-pasta.png' },
 ];
 
 export default function OrderOnline() {

@@ -36,6 +36,24 @@ const products = [
     available: true,
     featured: true,
   },
+  {
+    name: 'Brownie Tub',
+    description: 'A delightful tub filled with layers of brownie and rich chocolate sauce',
+    price: 120,
+    image: '/images/brownie-tub.png',
+    category: 'chocolate',
+    available: true,
+    featured: true,
+  },
+  {
+    name: 'White Sauce Pasta',
+    description: 'Creamy and cheesy classic white sauce pasta',
+    price: 120,
+    image: '/images/white-sauce-pasta.png',
+    category: 'savory',
+    available: true,
+    featured: true,
+  },
 ];
 
 const retiredProductNames = [
